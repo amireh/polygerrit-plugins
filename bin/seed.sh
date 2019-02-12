@@ -12,9 +12,9 @@
 #     ssh -p 29418 admin@localhost gerrit version
 #
 
-GERRIT_HOST="${GERRIT_HOST:-localhost}"
-GERRIT_PORT="${GERRIT_PORT:-29418}"
-GERRIT_USER="${GERRIT_USER:-admin}"
+export GERRIT_HOST="${GERRIT_HOST:-localhost}"
+export GERRIT_PORT="${GERRIT_PORT:-29418}"
+export GERRIT_USER="${GERRIT_USER:-admin}"
 
 main() {
   gerrit version || {
@@ -30,6 +30,15 @@ main() {
 
     exit 1
   }
+
+  # Create a bunch of users:
+  if ! gerrit ls-members "'Non-Interactive Users'" | grep -qF 'emperor'; then
+    gerrit create-account \
+      --group "'Non-Interactive Users'" \
+      --full-name "'Emperor Tamarin'" \
+      --email "'emperor@instructure.com'" \
+      --ssh-key - emperor < ~/.ssh/id_rsa.pub || exit $?
+  fi
 
   # Create the project:
   gerrit ls-projects | grep -q banana || {
@@ -54,33 +63,74 @@ main() {
   git branch --quiet -D master &&
   git checkout -b master
 
+  git config --local --add user.name 'Administrator'
+  git config --local --add user.email 'admin@example.com'
+
   # Submit a change:
   (
-    git checkout -B sample-01 master &&
-    touch foo &&
-    git add foo &&
-    git commit -m '[01] add foo' &&
-    gerrit-upsert
+    git branch -v | grep -F 'sample-01' || {
+      git checkout -b sample-01 master &&
+      touch foo &&
+      git add foo &&
+      git commit --author='Administrator <admin@example.com>' -m '[01] add foo' &&
+      gerrit-upsert
+    }
   ) || exit $?
 
   # Submit another change:
   (
-    git checkout -B sample-02 sample-01 &&
-    touch bar &&
-    git add bar &&
-    git commit -m '[02] add bar' &&
-    gerrit-upsert
+    git branch -v | grep -F 'sample-02' || {
+      git checkout -b sample-02 sample-01 &&
+      touch bar &&
+      git add bar &&
+      git commit --author='Administrator <admin@example.com>' -m '[02] add bar' &&
+      gerrit-upsert
+    }
   ) || exit $?
 
   # Submit another change:
   (
-    git checkout -B sample-03 sample-02 &&
-    touch baz &&
-    git add baz &&
-    git commit -m '[03] add baz' &&
-    gerrit-upsert
+    git branch -v | grep -F 'sample-03' || {
+      git checkout -b sample-03 sample-02 &&
+      touch baz &&
+      git add baz &&
+      git commit --author='Administrator <admin@example.com>' -m '[03] add baz' &&
+      gerrit-upsert
+    }
   ) || exit $?
 
+  git config --local --add user.name 'Emperor Tamarin'
+  git config --local --add user.email 'emperor@instructure.com'
+
+  # Submit a change by another user:
+  (
+    git branch -v | grep -F 'sample-04' || {
+      git checkout -b sample-04 sample-03 &&
+      git rm baz &&
+      git commit --author='Emperor Tamarin <emperor@instructure.com>' -m '[01] remove baz' &&
+      git push "ssh://emperor@${GERRIT_HOST}:${GERRIT_PORT}/banana" \
+        HEAD:refs/for/master%r=Administrator
+    }
+  ) || exit $?
+
+  (
+    git branch -v | grep -F 'sample-05-01' || {
+      git checkout -b sample-05-01 sample-04 &&
+      git rm bar &&
+      git commit --author='Emperor Tamarin <emperor@instructure.com>' -m '[02.a] remove bar' &&
+      git push "ssh://emperor@${GERRIT_HOST}:${GERRIT_PORT}/banana" \
+        HEAD:refs/for/master%r=Administrator
+    }
+  ) || exit $?
+  (
+    git branch -v | grep -F 'sample-05-02' || {
+      git checkout -b sample-05-02 sample-04 &&
+      git rm foo &&
+      git commit --author='Emperor Tamarin <emperor@instructure.com>' -m '[02.b] remove foo' &&
+      git push "ssh://emperor@${GERRIT_HOST}:${GERRIT_PORT}/banana" \
+        HEAD:refs/for/master%r=Administrator
+    }
+  ) || exit $?
 }
 
 # UTIL
@@ -96,7 +146,7 @@ gerrit-clone() {
 
 gerrit-upsert() {
   if ! gerrit query --format json -- status:open | grep -qF "$(git reflog -1 --format='%s')"; then
-    git push origin HEAD:refs/for/master
+    git push "${1:-origin}" HEAD:refs/for/master
   fi
 }
 
