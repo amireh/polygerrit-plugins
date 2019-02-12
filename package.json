@@ -1,0 +1,31 @@
+{
+  "name": "polygerrit-plugins",
+  "version": "1.0.0",
+  "description": "View hierarchy of patches pending review",
+  "scripts": {
+    "build": "rollup -c",
+    "start": "rollup -c -w",
+    "test": "mocha plugins"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/amireh/polygerrit-plugins.git"
+  },
+  "keywords": [
+    "gerrit",
+    "polygerrit",
+    "plugin"
+  ],
+  "author": "Ahmad Amireh",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/amireh/polygerrit-plugins/issues"
+  },
+  "homepage": "https://github.com/amireh/polygerrit-plugins#readme",
+  "devDependencies": {
+    "eslint": "5.13.0",
+    "pretty": "2.0.0",
+    "rollup": "^1.1.2",
+    "rollup-plugin-execute": "1.0.0"
+  }
+}
