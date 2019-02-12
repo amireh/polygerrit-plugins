@@ -33,6 +33,19 @@ npm install && npm run build
 npm install && npm start
 ```
 
+Add your public SSH key to the Administrator account in the [SSH
+Settings][g-sshs] panel and verify you can connect to Gerrit via SSH:
+
+    ssh -p 29418 admin@localhost gerrit
+
+Seed Gerrit with sample data:
+
+    bin/seed.sh
+
+If you want to remove the sample data, use this:
+
+    bin/unseed.sh
+
 Have fun!
 
 ## Credits
@@ -44,4 +57,5 @@ Have fun!
 [da-kld]: https://www.deviantart.com/king-lulu-deer
 [da-obb]: https://www.deviantart.com/theivoryfalcon/art/Old-Bramble-Beard-636075930
 [da-tif]: https://www.deviantart.com/theivoryfalcon
+[g-sshs]: http://localhost:8080/settings/#SSHKeys
 [pg]: https://www.gerritcodereview.com/dev-polygerrit.html
