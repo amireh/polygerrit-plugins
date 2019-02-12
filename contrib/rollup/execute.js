@@ -1,4 +1,4 @@
-import { spawn } from 'child_process'
+const { spawn } = require('child_process')
 
 // Execute a shell command after completing the build and writing artifacts.
 //
@@ -6,7 +6,7 @@ import { spawn } from 'child_process'
 //       'notify-send "Build completed!"'
 //     ])
 //
-export default function execute(_commands) {
+module.exports = function execute(_commands) {
   return {
     name: 'execute',
     writeBundle() {

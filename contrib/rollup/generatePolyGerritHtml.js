@@ -1,6 +1,6 @@
-import path from 'path';
-import pretty from 'pretty'
-import { writeFile } from 'fs';
+const path = require('path');
+const pretty = require('pretty');
+const { writeFile } = require('fs');
 
 // Generate the plugin entry HTML file for PolyGerrit for some JS chunk.
 //
@@ -12,7 +12,7 @@ import { writeFile } from 'fs';
 //
 // See https://gerrit-review.googlesource.com/Documentation/pg-plugin-dev.html#loading
 // See https://gerrit-review.googlesource.com/Documentation/dev-plugins.html#deployment
-export default function generatePolyGerritHtml({ chunk, name, output }) {
+module.exports = function generatePolyGerritHtml({ chunk, name, output }) {
   return {
     name: 'generate-polygerrit-html',
     writeBundle(chunkInfo) {
