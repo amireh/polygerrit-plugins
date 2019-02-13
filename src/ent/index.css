@@ -1,0 +1,16 @@
+.ent-change-marker {
+  display: inline-block;
+  vertical-align: middle;
+  font-family: inherit;
+}
+
+.ent-change-marker__spacer {
+  color: transparent;
+}
+
+.ent-change-marker:after {
+  content: '⮡';
+  /*content: '↳';*/
+  /*content: '⤷';*/
+  /*content: '🡒';*/
+}

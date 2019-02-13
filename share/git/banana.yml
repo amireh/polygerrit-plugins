@@ -1,0 +1,148 @@
+---
+- project:
+    name: banana
+
+- project:
+    name: train
+
+- user:
+    username: admin
+    full_name: Administrator
+    group: Administrators
+    email: admin@example.com
+    ssh_key: ~/.ssh/id_rsa.pub
+
+- user:
+    username: emperor
+    full_name: Emperor Tamarin
+    group: Non-Interactive Users
+    email: emperor@example.com
+    ssh_key: ~/.ssh/id_rsa.pub
+
+- user:
+    username: poodle
+    full_name: Empress Poodle
+    group: Non-Interactive Users
+    email: poodle@example.com
+    ssh_key: ~/.ssh/id_rsa.pub
+
+- user:
+    username: unwell
+    full_name: Unwell Galaxy
+    group: Non-Interactive Users
+    email: unwell@example.com
+    ssh_key: ~/.ssh/id_rsa.pub
+
+- change:
+    project: banana
+    name: '[01] spell "lunchroom"'
+    parent: master
+    author: emperor
+
+- change:
+    project: banana
+    name: '[02] spell "shade"'
+    parent: '[01]'
+    author: emperor
+
+- change:
+    project: train
+    name: 'train goes one'
+    parent: 'master'
+    author: unwell
+
+- change:
+    project: train
+    name: 'train goes two'
+    parent: 'train goes one'
+    author: unwell
+
+- change:
+    project: banana
+    name: '[03] spell "observation"'
+    parent: '[02]'
+    author: emperor
+
+- change:
+    project: banana
+    name: '[04.a] spell "magic"'
+    parent: '[03]'
+    author: poodle
+
+- change:
+    project: train
+    name: 'train goes three'
+    parent: 'train goes two'
+    author: unwell
+
+- change:
+    project: train
+    name: 'train goes four'
+    parent: 'train goes three'
+    author: unwell
+
+- change:
+    project: train
+    name: 'train goes five'
+    parent: 'train goes four'
+    author: unwell
+
+- change:
+    project: banana
+    name: 'another standalone'
+    parent: 'master'
+    author: poodle
+
+- change:
+    project: banana
+    name: '[04.b] spell "scissors"'
+    parent: '[03]'
+    author: poodle
+
+- change:
+    project: train
+    name: 'train goes six'
+    parent: 'train goes five'
+    author: unwell
+
+- change:
+    project: train
+    name: 'train goes seven'
+    parent: 'train goes six'
+    author: unwell
+
+- change:
+    project: train
+    name: 'train goes eight'
+    parent: 'train goes seven'
+    author: unwell
+
+- change:
+    project: train
+    name: 'train goes nine'
+    parent: 'train goes eight'
+    author: unwell
+
+- change:
+    project: train
+    name: 'train goes back eight'
+    parent: 'train goes nine'
+    author: admin
+
+- change:
+    project: train
+    name: 'train goes back seven'
+    parent: 'train goes back eight'
+    author: admin
+
+- change:
+    project: train
+    name: 'train goes back six'
+    parent: 'train goes back seven'
+    author: admin
+
+- change:
+    project: banana
+    name: 'standalone'
+    parent: 'master'
+    author: poodle
