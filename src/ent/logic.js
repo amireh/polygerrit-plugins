@@ -3,6 +3,7 @@ const getCurrentRevision = change => change.revisions[change.current_revision]
 
 exports.analyze = function(changes) {
   const cache = {}
+  const submittedSHAs = changes.map(x => x.current_revision)
   const once = (id, f) => {
     if (cache[id]) {
       return cache[id]
@@ -30,10 +31,14 @@ exports.analyze = function(changes) {
       return []
     }
 
-    return getCurrentRevision(change).commit.parents.map(x => x.commit)
+    return (
+      getCurrentRevision(change).commit.parents
+        .map(x => x.commit)
+        .filter(parentSha => submittedSHAs.indexOf(parentSha) > -1)
+    )
   }
 
-  return changes.reduce((tree, change) => {
+  const withAncestry = changes.reduce((tree, change) => {
     const sha = change.current_revision
     const ancestry = once(sha, () => ancestorsOf(sha))
 
@@ -54,5 +59,15 @@ exports.analyze = function(changes) {
 
     return tree
   }, {})
+
+  return withAncestry
+  // return Object.keys(withAncestry).reduce((acc, sha) => {
+  //   if (!withAncestry[sha].parents) {
+  //     return acc
+  //   }
+
+  //   acc[sha] = withAncestry[sha]
+  //   acc[sha].ancestry
+  // }, {})
 }
 

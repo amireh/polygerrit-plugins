@@ -1,5 +1,9 @@
-<p>Hello from Ent!</p>
+<dom-module>
+  <script>
+    {{ params.script }}
+  </script>
 
-<template is="dom-if" if="[[_showDashboardView]]" restamp="true">
-  <p>Hello from Ent</p>
-</template>
+  <style>
+    {{ params.style }}
+  </style>
+</dom-module>

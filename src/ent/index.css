@@ -1,15 +1,22 @@
 .ent-change-marker {
-  display: inline-block;
-  vertical-align: middle;
-  font-family: inherit;
+  /*display: inline-block;*/
+  /*vertical-align: middle;*/
+  /*font-family: inherit;*/
+  text-align: right;
+  font-family: courier, monospace;
+  /*font-weight: 700;*/
 }
 
 .ent-change-marker__spacer {
   color: transparent;
 }
 
-.ent-change-marker:after {
-  content: '⮡';
+.ent-change-marker--dependent:before {
+  content: '+';
+}
+
+.ent-change-marker--dependent:after {
+  /*content: '⮡';*/
   /*content: '↳';*/
   /*content: '⤷';*/
   /*content: '🡒';*/

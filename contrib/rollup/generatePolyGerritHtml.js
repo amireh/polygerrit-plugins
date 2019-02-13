@@ -14,6 +14,29 @@ const { readFile, writeFile } = require('fs');
 // See https://gerrit-review.googlesource.com/Documentation/dev-plugins.html#deployment
 module.exports = function generatePolyGerritHtml({ chunk, html, name, output, style }) {
   const buffers = { html: null, style: null }
+  const generateTemplate = (params) => {
+    if (buffers.html) {
+      return (
+        buffers.html
+          .replace('{{ params.name }}', params.name)
+          .replace('{{ params.style }}', params.style)
+          .replace('{{ params.script }}', params.script)
+      )
+    }
+    else {
+      return `
+        <dom-module>
+          <script>
+            ${params.script}
+          </script>
+
+          <style>
+            ${params.style}
+          </style>
+        </dom-module>
+      `
+    }
+  }
 
   return {
     name: 'generate-polygerrit-html',
@@ -49,19 +72,25 @@ module.exports = function generatePolyGerritHtml({ chunk, html, name, output, st
 
     writeBundle(chunkInfo) {
       return new Promise((resolve, reject) => {
-        const template = pretty(`
-          <dom-module>
-            ${buffers.html || ''}
+        const template = pretty(generateTemplate({
+          name,
+          style: buffers.style || '',
+          script: chunkInfo[chunk].code
+        }))
 
-            <script>
-              ${chunkInfo[chunk].code}
-            </script>
+        // const template = pretty(`
+        //   <dom-module>
+        //     ${buffers.html || ''}
 
-            <style>
-              ${buffers.style || ''}
-            </style>
-          </dom-module>
-        `)
+        //     <script>
+        //       ${chunkInfo[chunk].code}
+        //     </script>
+
+        //     <style>
+        //       ${buffers.style || ''}
+        //     </style>
+        //   </dom-module>
+        // `)
 
         writeFile(output, template, 'utf8', function(writeErr) {
           if (writeErr) {
