@@ -99,6 +99,11 @@ export default function GerritFButtonUIController($, core) {
   return {
     render: function(files, activeFile) {
       ui.setProps({ files: files, activeFile: activeFile });
+    },
+    unmount: () => {
+      if (ui.isMounted()) {
+        ui.unmount();
+      }
     }
   };
 }

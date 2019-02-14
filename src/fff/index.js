@@ -3,8 +3,18 @@ import createUI from './legacy/ui_controller'
 import { discardLeadingSlash } from './legacy/utils'
 
 Gerrit.install(plugin => {
-  const ui = createUI($, {
-    isViewingPatchset: () => true
+  const app = document.querySelector('gr-app')
+  const router = document.querySelector('gr-router')
+  const core = {
+    isViewingPatchset: () => ['change','diff'].indexOf(app.params.view) > -1
+  }
+
+  const ui = createUI($, core)
+
+  router.addEventListener('location-change', () => {
+    if (!core.isViewingPatchset()) {
+      ui.unmount()
+    }
   })
 
   plugin.on('showchange', (change, revision) => {
@@ -12,8 +22,8 @@ Gerrit.install(plugin => {
     const rvNumber = revision._number
 
     Promise.all([
-      plugin.restApi().get(`/changes/${chNumber}/revisions/${rvNumber}/files`),
-      plugin.restApi().get(`/changes/${chNumber}/revisions/${rvNumber}/comments`),
+      plugin.restApi().get(`/changes/${change.project}~${change._number}/revisions/${revision._number}/files`),
+      plugin.restApi().get(`/changes/${change.project}~${change._number}/revisions/${revision._number}/comments`),
     ]).then(([files, comments]) => {
       ui.render(createFileList({
         change,
