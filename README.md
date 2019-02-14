@@ -5,9 +5,9 @@ A set of plugins for [PolyGerrit][pg], Gerrit's web interface.
 Plugin | Purpose
 ------ | -------
 ent    | Display the hierarchy of patches pending review.
-       | ![ent](share/images/old-bramble-beard-by-TheIvoryFalcon.png)
+       | ![ent](share/images/old-bramble-beard-by-TheIvoryFalcon.png)
 fff    | Browse the current patchset file listing by pressing F.
-       | ![fff](share/images/f_letter_block_by_king_lulu_deer-dcnc98n.gif)
+       | ![fff](share/images/f_letter_block_by_king_lulu_deer-dcnc98n.gif)
 
 ## Installation
 
