@@ -18,9 +18,9 @@ module.exports = function generatePolyGerritHtml({ chunk, html, name, output, st
     if (buffers.html) {
       return (
         buffers.html
-          .replace('{{ params.name }}', params.name)
-          .replace('{{ params.style }}', params.style)
-          .replace('{{ params.script }}', params.script)
+          .replace('{% params.name %}', params.name)
+          .replace('{% params.style %}', params.style)
+          .replace('{% params.script %}', params.script)
       )
     }
     else {

@@ -38,36 +38,25 @@ exports.analyze = function(changes) {
     )
   }
 
-  const withAncestry = changes.reduce((tree, change) => {
+  return changes.reduce((tree, change) => {
     const sha = change.current_revision
     const ancestry = once(sha, () => ancestorsOf(sha))
 
-    ancestry.forEach(ancestorSha => {
-      if (ancestorSha !== sha && !tree[ancestorSha]) {
-        tree[ancestorSha] = { children: 0 }
-        tree[ancestorSha]['children'] += 1
-      }
-    })
+    // ancestry.forEach(ancestorSha => {
+    //   if (ancestorSha !== sha && !tree[ancestorSha]) {
+    //     tree[ancestorSha] = { children: 0 }
+    //     tree[ancestorSha]['children'] += 1
+    //   }
+    // })
 
     if (!tree[sha]) {
       tree[sha] = { children: 0 }
     }
 
-    tree[sha].parents = parentsOf(sha),
-    tree[sha].ancestry = ancestry,
+    // tree[sha].ancestry = ancestry,
     tree[sha].level = ancestry.length - 1
 
     return tree
   }, {})
-
-  return withAncestry
-  // return Object.keys(withAncestry).reduce((acc, sha) => {
-  //   if (!withAncestry[sha].parents) {
-  //     return acc
-  //   }
-
-  //   acc[sha] = withAncestry[sha]
-  //   acc[sha].ancestry
-  // }, {})
 }
 
