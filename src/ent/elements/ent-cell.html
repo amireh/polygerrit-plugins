@@ -1,0 +1,52 @@
+<!--
+Table cell containing the number of pending parent commits.
+
+    <td is="ent-cell" level="3" />
+    => "+3"
+-->
+<dom-module id="ent-cell">
+  <template>
+    <span hidden$="[[!level]]">
+      +[[level]]
+    </span>
+  </template>
+
+  <style>
+    :host {
+      color: #D32F2F;
+    }
+
+    :host .ent-change-marker__spacer {
+      color: transparent;
+    }
+  </style>
+
+  <script>
+    Polymer({
+      is: 'ent-cell',
+      extends: 'td',
+      properties: {
+        class: {
+          reflectToAttribute: true,
+          type: String,
+          value: 'ent-change-marker u-monospace gr-change-list-item',
+        },
+
+        title: {
+          computed: 'computeTitle(level)',
+          reflectToAttribute: true,
+          type: String,
+        },
+
+        level: {
+          type: Number,
+          value: 0
+        }
+      },
+
+      computeTitle(level) {
+        return `${level} parent commits not yet merged`
+      }
+    })
+  </script>
+</dom-module>

@@ -1,0 +1,35 @@
+<!--
+Table header containing a "branch" icon.
+
+    <th is="ent-header" level="3" />
+    => "+3"
+-->
+<dom-module id="ent-header">
+  <template>
+    <ent-icon />
+  </template>
+
+  <style>
+    th:host.gr-change-list {
+      vertical-align: middle;
+      line-height: 1;
+    }
+  </style>
+
+  <script>
+    Polymer({
+      is: 'ent-header',
+      extends: 'th',
+      properties: {
+        class: {
+          reflectToAttribute: true,
+          value: 'ent topHeader style-scope gr-change-list'
+        },
+        title: {
+          reflectToAttribute: true,
+          value: 'Parent commits not yet merged'
+        }
+      }
+    })
+  </script>
+</dom-module>

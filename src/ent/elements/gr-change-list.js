@@ -1,25 +1,26 @@
-import { analyze } from '../logic'
+export default () => {
+  const GrChangeList = document.createElement('gr-change-list').constructor
 
-const GrChangeList = document.createElement('gr-change-list').constructor.prototype
-
-// used by gr-change-list-view
-GrChangeList._ent_changesDidChange = function(changes) {
-  if (changeSetHasData(changes)) {
-    renderAfterNextPaint(this, changes)
-  }
-}
-
-// used by gr-dashboard-view
-GrChangeList._ent_sectionsDidChange = function(sections) {
-  sections.forEach(({ results: changes }) => {
+  // triggered by gr-change-list-view
+  GrChangeList.prototype._ent_changesDidChange = function(changes) {
     if (changeSetHasData(changes)) {
       renderAfterNextPaint(this, changes)
     }
-  })
-}
+  }
 
-GrChangeList._addObserverEffect('changes', '_ent_changesDidChange')
-GrChangeList._addObserverEffect('sections', '_ent_sectionsDidChange')
+  GrChangeList.prototype._addObserverEffect('changes', '_ent_changesDidChange')
+
+  // triggered by gr-dashboard-view
+  GrChangeList.prototype._ent_sectionsDidChange = function(sections) {
+    sections.forEach(({ results: changes }) => {
+      if (changeSetHasData(changes)) {
+        renderAfterNextPaint(this, changes)
+      }
+    })
+  }
+
+  GrChangeList.prototype._addObserverEffect('sections', '_ent_sectionsDidChange')
+}
 
 // (Array.<ChangeInfo>): Bool
 const changeSetHasData = changes => {
@@ -46,7 +47,7 @@ const render = ({ changes, rootDOMNode }) => {
 
   changes.forEach(change => {
     renderCell({
-      level: hierarchy[change.current_revision].level,
+      level: hierarchy[change.current_revision],
       changeDOMNode: findDOMNodeForChange(rootDOMNode, change),
     })
   })
@@ -81,3 +82,52 @@ const findDOMNodeForChange = (rootDOMNode, change) => (
     .querySelector(`gr-change-list-item a[href="/c/${change.project}/+/${change._number}"]`)
     .closest('gr-change-list-item')
 )
+
+const getCurrentRevision = change => change.revisions[change.current_revision]
+
+const analyze = function(changes) {
+  const submittedSHAs = changes.reduce((acc, x) => {
+    acc[x.current_revision] = true
+    return acc
+  }, {})
+
+  const ancestorsOf = memoize(sha => {
+    return parentsOf(sha).reduce((acc, parentSha) => {
+      return acc.concat(ancestorsOf(parentSha))
+    }, [ sha ])
+  })
+
+  const parentsOf = memoize(sha => {
+    const change = changes.find(change => change.current_revision === sha)
+
+    if (!change) {
+      return []
+    }
+
+    return (
+      getCurrentRevision(change).commit.parents
+        .map(x => x.commit)
+        .filter(parentSha => submittedSHAs[parentSha] === true)
+    )
+  })
+
+  return changes.reduce((tree, { current_revision }) => {
+    tree[current_revision] = ancestorsOf(current_revision).length - 1
+
+    return tree
+  }, {})
+}
+
+const memoize = f => {
+  const cache = {}
+
+  return (...args) => {
+    const cacheKey = String(args[0])
+
+    if (!cache.hasOwnProperty(cacheKey)) {
+      cache[cacheKey] = f(...args)
+    }
+
+    return cache[cacheKey]
+  }
+}

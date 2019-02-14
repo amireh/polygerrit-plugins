@@ -5,7 +5,7 @@
   "scripts": {
     "build": "rollup -c",
     "start": "rollup -c -w",
-    "test": "mocha plugins"
+    "test": "mocha src/ent/__tests__"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,7 @@
   "homepage": "https://github.com/amireh/polygerrit-plugins#readme",
   "devDependencies": {
     "chai": "4.2.0",
+    "cheerio": "1.0.0-rc.2",
     "eslint": "5.13.0",
     "lodash-template": "^1.0.0",
     "mocha": "5.2.0",

@@ -1,7 +1,7 @@
 const path = require('path')
-const generatePolyGerritHtml = require('./contrib/rollup/generatePolyGerritHtml')
-const execute = require('./contrib/rollup/execute')
 const commonjs = require('rollup-plugin-commonjs')
+const execute = require('./contrib/rollup-plugin-execute')
+const polymer = require('./contrib/rollup-plugin-polymer')
 
 const GERRIT_VERSION = '2.15'
 const ENT_BUILD      = '1'
@@ -18,19 +18,17 @@ module.exports = [
       format: 'iife'
     },
     plugins: [
-      generatePolyGerritHtml({
-        chunk: 'ent.js',
-        name: 'ent',
+      commonjs(),
+
+      polymer({
+        inject: [{ chunk: 'ent.js' }],
+        input: 'src/ent/index.html',
         output: `build/ent-${GERRIT_VERSION}-${ENT_BUILD}.html`,
-        html: path.resolve(__dirname, 'src/ent/index.html'),
-        style: path.resolve(__dirname, 'src/ent/index.css'),
       }),
 
       execute([
         installGerritPlugin(`/mnt/build/ent-${GERRIT_VERSION}-${ENT_BUILD}.html`)
       ]),
-
-      commonjs()
     ]
   },
 ]
