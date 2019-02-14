@@ -1,4 +1,5 @@
 const $ = require('cheerio')
+const arrayFlatten = require('array-flatten')
 const path = require('path');
 const pretty = require('pretty');
 const { readFile, readFileSync, writeFile } = require('fs');
@@ -23,12 +24,10 @@ module.exports = function polymer({ input, inject = [], output }) {
     buildStart() {
       state.elements = []
 
-      this.addWatchFile(input)
-
-      return load(input).then(({ elements, imports }) => {
+      return loadAndAggregate(input).then(({ elements, sources }) => {
         state.elements = elements
 
-        imports.forEach(file => {
+        Object.keys(sources).forEach(file => {
           this.addWatchFile(file)
         })
       })
@@ -61,61 +60,24 @@ module.exports = function polymer({ input, inject = [], output }) {
   }
 }
 
-const load = file => readFileP(file).then(buffer => {
-  const { elements, imports } = parse({ file, html: buffer.toString('utf8') })
+const loadAndAggregate = file => load(file).then(results => (
+  arrayFlatten(results).reduce((acc, { element, source }) => {
+    acc.elements.push(element)
+    acc.sources[source] = true
 
-  if (imports.length === 0) {
-    return { elements, imports }
-  }
-  else {
-    return loadAndAggregate(imports).then(result => {
-      return ({
-        elements: result.elements.concat(elements),
-        imports: imports.concat(result.imports),
-      })
-    })
-  }
-})
+    return acc
+  }, { elements: [], sources: {} })
+))
 
-const loadAndAggregate = (files) => {
-  let elements = []
-  let imports = []
-
-  const loadAt = (cursor) => {
-    const file = files[cursor]
-
-    if (!file) {
-      return Promise.resolve({ elements, imports })
+const load = file => readFileP(file).then(buffer => Promise.all(
+  $(buffer.toString('utf8')).toArray().map(node => {
+    if (node.name === 'link' && $(node).attr('rel') === 'import') {
+      return load(path.resolve(path.dirname(file), $(node).attr('href')))
     }
     else {
-      return load(file).then(result => {
-        elements = elements.concat(result.elements)
-        imports  = imports.concat(result.imports)
-
-        return loadAt(cursor + 1)
-      })
-    }
-  }
-
-  return loadAt(0)
-}
-
-const parse = ({ file, html }) => {
-  const elements = []
-  const imports = []
-
-  $(html).each(function(index, node) {
-    if (node.type === 'tag' && node.name === 'link' && $(node).attr('rel') === 'import') {
-      imports.push(
-        path.resolve(path.dirname(file), $(node).attr('href'))
-      )
-    }
-    else {
-      elements.push(node)
+      return Promise.resolve({ element: node, source: file })
     }
   })
-
-  return { elements, imports }
-}
+))
 
 const readFileP = promisify(readFile)

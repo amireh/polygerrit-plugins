@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/amireh/polygerrit-plugins#readme",
   "devDependencies": {
+    "array-flatten": "2.1.2",
     "chai": "4.2.0",
     "cheerio": "1.0.0-rc.2",
     "eslint": "5.13.0",
