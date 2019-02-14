@@ -38,13 +38,27 @@ Settings][g-sshs] panel and verify you can connect to Gerrit via SSH:
 
     ssh -p 29418 admin@localhost gerrit
 
-Seed Gerrit with sample data:
+### Accessing Gerrit over SSH
 
-    bin/seed.sh
+    ssh -p 29418 admin@localhost gerrit [arguments]
+
+Or use the helper `bin/gerrit.sh` which invokes the above for you:
+
+    bin/gerrit.sh [arguments]
+
+### Seeding Gerrit with sample data
+
+Install [gerrit-seed][gh-gs]:
+
+    gem install gerrit-seed
+
+Use the provided seed:
+
+    gerrit-seed < share/git/banana.yml
 
 If you want to remove the sample data, use this:
 
-    bin/unseed.sh
+    gerrit-unseed < share/git/banana.yml
 
 Have fun!
 
@@ -58,4 +72,5 @@ Have fun!
 [da-obb]: https://www.deviantart.com/theivoryfalcon/art/Old-Bramble-Beard-636075930
 [da-tif]: https://www.deviantart.com/theivoryfalcon
 [g-sshs]: http://localhost:8080/settings/#SSHKeys
+[gh-gs]: https://github.com/amireh/gerrit-seed
 [pg]: https://www.gerritcodereview.com/dev-polygerrit.html
