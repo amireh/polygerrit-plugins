@@ -1,5 +1,5 @@
-import $ from 'jquery'
-import createUI from './legacy/ui_controller'
+// import $ from 'jquery'
+// import createUI from './legacy/ui_controller'
 import { discardLeadingSlash } from './legacy/utils'
 
 Gerrit.install(plugin => {

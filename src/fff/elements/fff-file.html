@@ -1,0 +1,69 @@
+<dom-module id="fff-file">
+  <template>
+    <div class="fff-file">
+      <span class="fff-file__icon fff-icon"></span>
+
+      <a class="fff-file__link" href="[[url]]">[[path]]</a>
+
+      <span class="fff-file__comment-count">
+        <template is="dom-if" if="[[comments.length]]">
+          [[comments.length]]
+        </template>
+      </span>
+    </div>
+  </template>
+
+  <style>
+    .fff-file:hover,
+    .fff-file--selected {
+      background: #fcfa96;
+    }
+
+    .fff-file--active {
+      background-color: #DEF;
+    }
+
+    .fff-file__icon:before {
+      content: "\e99d";
+    }
+
+    .fff-file__icon {
+      font-size: 13px;
+      line-height: 16px;
+      position: absolute;
+    }
+
+    .fff-file__link {
+      display: block;
+      margin-right: 2em;
+      margin-left: 16px;
+      padding-left: 3px;
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .fff-file__comment-count {
+      position: absolute;
+      right: 0;
+      max-width: 2em;
+      padding-right: 1em;
+      text-align: right;
+      font-weight: bold;
+      line-height: 1.6;
+    }
+  </style>
+
+  <script>
+    Polymer({
+      is: 'fff-file',
+      properties: {
+        comments: {
+          type: Array,
+        },
+
+        path: String,
+        url: String
+      }
+    })
+  </script>
+</dom-module>

@@ -1,3 +1,5 @@
+<link rel="import" href="./fff-file.html">
+
 <dom-module id="fff-folder">
   <template>
     <div>
@@ -20,9 +22,12 @@
         </li>
 
         <template is="dom-repeat" items="[[files]]" as="file">
-          <li class="fff-file">
-            <span class="fff-file__icon fff-icon"></span>
-            <a class="fff-file__link">[[file.filePath]]</a>
+          <li class="fff-folder__file-container">
+            <fff-file
+              comments="[[file.comments]]"
+              path="[[file.filePath]]"
+              url="[[file.url]]"
+            />
           </li>
         </template>
       </ol>
@@ -66,47 +71,8 @@
       line-height: 1.25rem;
     }
 
-    .fff-file {
-      list-style: none;
+    .fff-folder__file-container {
       margin-left: 8px;
-    }
-
-    .fff-file:hover,
-    .fff-file--selected {
-      background: #fcfa96;
-    }
-
-    .fff-file--active {
-      background-color: #DEF;
-    }
-
-    .fff-file__icon:before {
-      content: "\e99d";
-    }
-
-    .fff-file__icon {
-      font-size: 13px;
-      line-height: 16px;
-      position: absolute;
-    }
-
-    .fff-file__link {
-      display: block;
-      margin-right: 2em;
-      margin-left: 16px;
-      padding-left: 3px;
-      text-decoration: none;
-      word-break: break-all;
-    }
-
-    .fff-file__comment-count {
-      position: absolute;
-      right: 0;
-      max-width: 2em;
-      padding-right: 1em;
-      text-align: right;
-      font-weight: bold;
-      line-height: 1.6;
     }
   </style>
 
