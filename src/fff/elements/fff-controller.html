@@ -1,0 +1,36 @@
+<link rel="import" href="./fff-frame.html">
+
+<dom-module id="fff-controller">
+  <template>
+    <template is="dom-if" if="[[visible]]" restamp="true">
+      <fff-frame files="[[files]]" />
+    </template>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'fff-controller',
+
+      properties: {
+        view: {
+          type: String,
+        },
+
+        files: {
+          type: Array,
+        },
+
+        visible: {
+          computed: 'isVisible(view)',
+          // reflectToAttribute: true,
+          type: Boolean,
+          value: false,
+        }
+      },
+
+      isVisible(view) {
+        return ['change','diff'].indexOf(view) > -1
+      }
+    })
+  </script>
+</dom-module>

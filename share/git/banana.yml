@@ -144,5 +144,11 @@
 - change:
     project: banana
     name: 'standalone'
+    files:
+      - lib/a.js
+      - lib/b.js
+      - lib/__tests__/index.test.js
+      - lib/__tests__/a.test.js
+      - share/foo/bar/baz
     parent: 'master'
     author: poodle

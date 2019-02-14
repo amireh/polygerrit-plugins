@@ -1,0 +1,78 @@
+<link rel="import" href="./fff-folder.html">
+
+<dom-module id="fff-file-tree">
+  <template>
+    <div class="f-button__table">
+      <fff-folder
+        files="[[folder.files]]"
+        folders="[[folder.folders]]"
+      />
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'fff-file-tree',
+
+      properties: {
+        files: {
+          type: Array,
+        },
+
+        rootTree: {
+          type: Boolean,
+          value: true,
+        },
+
+        folder: {
+          type: Object,
+          computed: 'createTreeView(files)'
+        },
+
+        // folders: {
+        //   type: Array,
+        //   computed: 'createFolders(fileTree)'
+        // }
+      },
+
+      createFolders(tree) {
+        return Object.keys(tree).sort().map(name => tree[name])
+      },
+
+      createTreeView(fileList) {
+        function findOrCreateFolder(path, startingFolder) {
+          var foldersInPath = path.split('/').filter(x => x.length > 0);
+          var targetFolder = startingFolder
+
+          foldersInPath.forEach(function(folderName) {
+            let childFolder = targetFolder.folders.find(x => x.name === folderName)
+
+            if (!childFolder) {
+              childFolder = {
+                files: [],
+                folders: [],
+                name: folderName,
+              }
+
+              targetFolder.folders.push(childFolder);
+            }
+
+            targetFolder = childFolder;
+          });
+
+          return targetFolder;
+        }
+
+        const rootFolder = { name: '/', files: [], folders: [] };
+
+        fileList.forEach(function(file) {
+          const folderName = file.filePath.split('/').slice(0, -1).join('/')
+
+          findOrCreateFolder(folderName, rootFolder).files.push(file);
+        });
+
+        return rootFolder;
+      }
+    })
+  </script>
+</dom-module>

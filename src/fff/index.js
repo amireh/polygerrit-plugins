@@ -9,13 +9,19 @@ Gerrit.install(plugin => {
     isViewingPatchset: () => ['change','diff'].indexOf(app.params.view) > -1
   }
 
-  const ui = createUI($, core)
+  // const ui = createUI($, core)
 
   router.addEventListener('location-change', () => {
-    if (!core.isViewingPatchset()) {
-      ui.unmount()
-    }
+    controller.view = app.params.view
+
+    // if (!core.isViewingPatchset()) {
+    //   ui.unmount()
+    // }
   })
+
+  const controller = document.body.appendChild(
+    document.createElement('fff-controller')
+  )
 
   plugin.on('showchange', (change, revision) => {
     const chNumber = change._number
@@ -25,12 +31,15 @@ Gerrit.install(plugin => {
       plugin.restApi().get(`/changes/${change.project}~${change._number}/revisions/${revision._number}/files`),
       plugin.restApi().get(`/changes/${change.project}~${change._number}/revisions/${revision._number}/comments`),
     ]).then(([files, comments]) => {
-      ui.render(createFileList({
+      controller.view = app.params.view
+      controller.files = createFileList({
         change,
         comments,
         files,
         revision,
-      }))
+      })
+
+      // ui.render(controller.files)
     })
   })
 })

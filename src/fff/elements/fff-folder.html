@@ -1,0 +1,121 @@
+<dom-module id="fff-folder">
+  <template>
+    <div>
+      <ol>
+        <li>
+          <template is="dom-if" if="[[name]]">
+            <header class="fff-folder-header">
+              <span class="fff-folder__icon fff-icon"></span>
+              <span class="fff-folder-name">[[name]]/</span>
+            </header>
+          </template>
+
+          <template is="dom-repeat" items="[[folders]]" as="subFolder">
+            <fff-folder
+              name="[[subFolder.name]]"
+              folders="[[subFolder.folders]]"
+              files="[[subFolder.files]]"
+            />
+          </template>
+        </li>
+
+        <template is="dom-repeat" items="[[files]]" as="file">
+          <li class="fff-file">
+            <span class="fff-file__icon fff-icon"></span>
+            <a class="fff-file__link">[[file.filePath]]</a>
+          </li>
+        </template>
+      </ol>
+    </div>
+  </template>
+
+  <style>
+    .fff-folder-header {
+      font-weight: bold;
+      padding-left: 3px;
+    }
+    .fff-folder-name {
+      display: block;
+      line-height: 16px;
+      margin-left: 16px;
+      padding-left: 3px;
+      vertical-align: middle;
+    }
+
+    .fff-folder__icon {
+      font-size: 13px;
+      position: absolute;;
+    }
+
+    .fff-folder__icon:before {
+      content: "\e9e7";
+    }
+    .fff-folder__icon-open:before {
+      content: "\e9e8";
+    }
+
+    ol {
+      list-style: none;
+      margin-left: 0;
+      padding-left: 8px;
+    }
+
+    li {
+      padding-left: 0;
+      margin-left: 0;
+      line-height: 1.25rem;
+    }
+
+    .fff-file {
+      list-style: none;
+      margin-left: 8px;
+    }
+
+    .fff-file:hover,
+    .fff-file--selected {
+      background: #fcfa96;
+    }
+
+    .fff-file--active {
+      background-color: #DEF;
+    }
+
+    .fff-file__icon:before {
+      content: "\e99d";
+    }
+
+    .fff-file__icon {
+      font-size: 13px;
+      line-height: 16px;
+      position: absolute;
+    }
+
+    .fff-file__link {
+      display: block;
+      margin-right: 2em;
+      margin-left: 16px;
+      padding-left: 3px;
+      text-decoration: none;
+      word-break: break-all;
+    }
+
+    .fff-file__comment-count {
+      position: absolute;
+      right: 0;
+      max-width: 2em;
+      padding-right: 1em;
+      text-align: right;
+      font-weight: bold;
+      line-height: 1.6;
+    }
+  </style>
+
+  <script>
+    Polymer({
+      is: 'fff-folder',
+      properties: {
+        name: String
+      }
+    })
+  </script>
+</dom-module>

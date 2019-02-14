@@ -1,0 +1,30 @@
+<link rel="import" href="./fff-file-tree.html">
+
+<dom-module id="fff-frame">
+  <template>
+    <div class="f-button__frame">
+      <fff-file-tree files="[[files]]" />
+    </div>
+  </template>
+
+  <script>
+    Polymer({
+      is: 'fff-frame',
+
+      properties: {
+        displayAsTree: {
+          type: Boolean,
+          value: false
+        }
+      },
+
+      attached() {
+        document.body.classList.add('gerrit--with-f-button');
+      },
+
+      detached() {
+        document.body.classList.remove('gerrit--with-f-button');
+      },
+    })
+  </script>
+</dom-module>
