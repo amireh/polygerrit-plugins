@@ -60,6 +60,18 @@ If you want to remove the sample data, use this:
 
     gerrit-unseed < share/git/banana.yml
 
+### Adding a new plugin
+
+Clone the sample plugin `share/sample-plugin` into `src/[name]`, restart
+your build runner, and start amending the source files as needed.
+
+```shell
+cp -rf share/sample-plugin src/meme &&
+echo 'Gerrit.install(() => { console.log("hi!") })' >> src/meme/index.js &&
+npm run build &&
+open http://localhost:8080
+```
+
 Have fun!
 
 ## Credits

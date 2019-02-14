@@ -14,7 +14,7 @@ const { promisify } = require('util')
 //
 // See https://gerrit-review.googlesource.com/Documentation/pg-plugin-dev.html#loading
 // See https://gerrit-review.googlesource.com/Documentation/dev-plugins.html#deployment
-module.exports = function polymer({ input, inject, output }) {
+module.exports = function polymer({ input, inject = [], output }) {
   const state = { elements: null }
 
   return {
