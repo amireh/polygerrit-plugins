@@ -31,6 +31,10 @@
     "pretty": "2.0.0",
     "rollup": "^1.1.2",
     "rollup-plugin-commonjs": "9.2.0",
-    "rollup-plugin-execute": "1.0.0"
+    "rollup-plugin-execute": "1.0.0",
+    "rollup-plugin-node-resolve": "4.0.0"
+  },
+  "dependencies": {
+    "jquery": "3.3.1"
   }
 }
