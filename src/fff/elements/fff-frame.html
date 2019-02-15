@@ -1,29 +1,14 @@
-<link rel="import" href="../icons/fff-dock-to-side-icon.html">
-<link rel="import" href="../icons/fff-overlay-icon.html">
-<link rel="import" href="../icons/fff-close-icon.html">
+<link rel="import" href="./fff-frame-controls.html">
 
 <dom-module id="fff-frame">
   <template>
-    <div class="controls">
-      <template is="dom-if" if="[[isDockedToSide]]">
-        <button on-click="_turnIntoOverlay" title="Undock into separate window">
-          <fff-overlay-icon width="16" height="16"></fff-overlay-icon>
-        </button>
-      </template>
-
-      <template is="dom-if" if="[[isOverlay]]">
-        <button on-click="_dockToSide" title="Dock to left">
-          <fff-dock-to-side-icon width="16" height="16"></fff-dock-to-side-icon>
-        </button>
-      </template>
-
-      <button on-click="_close" title="Close FFF">
-        <fff-close-icon width="20" height="20"></fff-close-icon>
-      </button>
-    </div>
+    <fff-frame-controls
+      docking-style="{{dockingStyle}}"
+      toggled="{{toggled}}"
+    ></fff-frame-controls>
 
     <div class="content-scroller">
-      <content />
+      <content></content>
     </div>
   </template>
 
@@ -54,25 +39,6 @@
       border-radius: 8px;
       overflow: hidden;
     }
-
-    .controls {
-      background: #eee;
-      text-align: right;
-      padding: 0.5rem;
-    }
-
-    .controls button {
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      margin-left: 0.5rem;
-      vertical-align: middle;
-    }
-
-    .controls ::content svg {
-      fill: #555;
-      stroke-width: 0;
-    }
   </style>
 
   <script>
@@ -80,51 +46,14 @@
       is: 'fff-frame',
 
       properties: {
-        // will be mutating this
         dockingStyle: {
           type: String,
-          notify: true,
-          reflectToAttribute: true
+          notify: true
         },
-
-        isOverlay: {
-          type: Boolean,
-          computed: '_computeIsOverlay(dockingStyle)'
-        },
-
-        isDockedToSide: {
-          type: Boolean,
-          computed: '_computeIsDockedToSide(dockingStyle)'
-        },
-
         toggled: {
           type: Boolean,
           notify: true
         }
-      },
-
-      _changeDockingStyle(e) {
-        this.set('dockingStyle', e.target.value)
-      },
-
-      _computeIsOverlay(dockingStyle) {
-        return dockingStyle == 'overlay'
-      },
-
-      _computeIsDockedToSide(dockingStyle) {
-        return dockingStyle == 'side'
-      },
-
-      _close() {
-        this.set('toggled', false)
-      },
-
-      _dockToSide() {
-        this.set('dockingStyle', 'side')
-      },
-
-      _turnIntoOverlay() {
-        this.set('dockingStyle', 'overlay')
       }
     })
   </script>
