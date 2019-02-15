@@ -1,55 +1,56 @@
+<link rel="import" href="../icons/fff-file-icon.html">
+
 <dom-module id="fff-file">
   <template>
-    <div class="fff-file">
-      <span class="fff-file__icon fff-icon"></span>
+    <fff-file-icon width="16" height="16"></fff-file-icon>
 
-      <a class="fff-file__link" href="[[url]]">[[path]]</a>
+    <a class="link" href="[[url]]">[[path]]</a>
 
-      <span class="fff-file__comment-count">
-        <template is="dom-if" if="[[comments.length]]">
-          [[comments.length]]
-        </template>
-      </span>
-    </div>
+    <span class="comments">
+      <template is="dom-if" if="[[comments.length]]">
+        ([[comments.length]])
+      </template>
+    </span>
   </template>
 
   <style>
-    .fff-file:hover,
-    .fff-file--selected {
-      background: #fcfa96;
-    }
-
-    .fff-file--active {
-      background-color: #DEF;
-    }
-
-    .fff-file__icon:before {
-      content: "\e99d";
-    }
-
-    .fff-file__icon {
-      font-size: 13px;
-      line-height: 16px;
-      position: absolute;
-    }
-
-    .fff-file__link {
+    :host {
       display: block;
-      margin-right: 2em;
-      margin-left: 16px;
-      padding-left: 3px;
+      position: relative;
+      padding-left: 16px; /* offset for icon */
+    }
+
+    :host:hover {
+      background: #f5fafd; /* match gr-file-list .file-row */
+
+    }
+
+    fff-file-icon {
+      position: absolute;
+      margin-left: -16px;
+      margin-top: 1px;
+    }
+
+    .link {
+      color: #2a66d9; /* match a.gr-file-list */
+      /*display: inline-block;*/
       text-decoration: none;
       word-break: break-all;
+      /*vertical-align: middle;*/
+      /*margin-right: 1rem;*/
     }
 
-    .fff-file__comment-count {
-      position: absolute;
-      right: 0;
-      max-width: 2em;
-      padding-right: 1em;
-      text-align: right;
+    .comments {
+      /*display: inline-block;*/
+      /*vertical-align: middle;*/
+      /*position: absolute;
+      top: 0;
+      right: 0;*/
+      /*max-width: 1rem;*/
+      /*padding-right: 1rem;*/
+      /*text-align: right;*/
       font-weight: bold;
-      line-height: 1.6;
+      /*line-height: 1.6;*/
     }
   </style>
 

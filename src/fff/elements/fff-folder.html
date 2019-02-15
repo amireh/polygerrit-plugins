@@ -1,4 +1,5 @@
 <link rel="import" href="./fff-file.html">
+<link rel="import" href="../icons/fff-folder-icon.html">
 
 <dom-module id="fff-folder">
   <template>
@@ -7,7 +8,7 @@
         <li>
           <template is="dom-if" if="[[name]]">
             <header class="fff-folder-header">
-              <span class="fff-folder__icon fff-icon"></span>
+              <fff-folder-icon width="16" height="16"></fff-folder-icon>
               <span class="fff-folder-name">[[name]]/</span>
             </header>
           </template>
@@ -36,33 +37,28 @@
 
   <style>
     .fff-folder-header {
-      font-weight: bold;
-      padding-left: 3px;
+      /*padding-left: 3px;*/
     }
+
     .fff-folder-name {
-      display: block;
-      line-height: 16px;
-      margin-left: 16px;
-      padding-left: 3px;
-      vertical-align: middle;
+      font-weight: bold;
+      display: inline-block;
+      /*line-height: 16px;*/
+      /*margin-left: 16px;*/
+      /*padding-left: 3px;*/
+      /*vertical-align: middle;*/
     }
 
-    .fff-folder__icon {
-      font-size: 13px;
-      position: absolute;;
-    }
-
-    .fff-folder__icon:before {
-      content: "\e9e7";
-    }
-    .fff-folder__icon-open:before {
-      content: "\e9e8";
+    fff-folder-icon {
+      /*width: 13px;*/
+      /*font-size: 13px;*/
+      /*position: absolute;*/
     }
 
     ol {
       list-style: none;
       margin-left: 0;
-      padding-left: 8px;
+      padding-left: 0.75rem;
     }
 
     li {
@@ -72,7 +68,7 @@
     }
 
     .fff-folder__file-container {
-      margin-left: 8px;
+      margin-left: 0.75rem;
     }
   </style>
 

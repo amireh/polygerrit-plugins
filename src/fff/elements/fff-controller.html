@@ -1,10 +1,16 @@
+<link rel="import" href="./fff-file-tree.html">
 <link rel="import" href="./fff-frame.html">
+<link rel="import" href="./fff-layout.html">
 
 <dom-module id="fff-controller">
   <template>
     <div>
       <template is="dom-if" if="[[_isVisible(view, toggled)]]" restamp="true">
-        <fff-frame files="[[files]]" />
+        <fff-layout docking-style="[[dockingStyle]]">
+          <fff-frame docking-style="{{dockingStyle}}" toggled="{{toggled}}">
+            <fff-file-tree files="[[files]]" />
+          </fff-frame>
+        </fff-layout>
       </template>
     </div>
   </template>
@@ -32,6 +38,11 @@
           }
         },
 
+        dockingStyle: {
+          type: String,
+          value: 'side',
+        },
+
         toggled: {
           type: Boolean,
           value: false
@@ -40,6 +51,16 @@
         view: {
           type: String,
           observer: '_resetToggledStateOnLeave'
+        }
+      },
+
+      attached() {
+        if (location.search.includes('fff=1')) {
+          this.set('toggled', true)
+        }
+
+        if (location.search.match('fff-docking-style=(side|overlay)')) {
+          this.set('dockingStyle', RegExp.$1)
         }
       },
 

@@ -1,71 +1,7 @@
 <link rel="import" href="./elements/fff-controller.html" />
-<link rel="import" href="./fonts.html" />
 
 <dom-module>
   <style>
-    [class*="fff-icon"],
-    [class^="f-button-icon__"],
-    [class*=" f-button-icon__"] {
-      font-family: 'gerrit-f-button' !important;
-      speak: none;
-      font-style: normal;
-      font-weight: normal;
-      font-variant: normal;
-      text-transform: none;
-      line-height: 1;
-
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-
-    body.gerrit--with-f-button,
-    body.gerrit--with-f-button gr-fixed-panel .gr-fixed-panel.floating {
-      margin-left: 240px;
-    }
-
-    body.gerrit--with-f-button-overlay,
-    body.gerrit--with-f-button-overlay gr-fixed-panel .gr-fixed-panel.floating {
-      margin-left: 0;
-    }
-
-    .f-button__frame {
-      position: fixed;
-      top: 0;
-      right: auto;
-      bottom: 0;
-      left: 0;
-
-      width: 240px;
-      overflow: auto;
-
-      border-color: #aaa;
-      border-right-style: solid;
-      border-right-width: 1px;
-      background: white;
-      padding: 10px;
-
-      font-size: 0.85em;
-      line-height: 1.4;
-
-      z-index: 6;
-    }
-
-    body.gerrit--with-f-button-overlay .f-button__frame {
-      width: 50%;
-      left: 25%;
-      top: 50%;
-      border-left-width: 1px;
-      border-left-style: solid;
-      border-top-style: solid;
-      border-top-width: 1px;
-
-      opacity: 0.85;
-    }
-
-    body.gerrit--with-f-button-overlay .f-button__frame:hover {
-      opacity: 1;
-    }
-
     .f-button__frame--commented-only .f-button-file:not(.f-button-file--commented) {
       display: none;
     }

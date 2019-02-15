@@ -152,3 +152,33 @@
       - share/foo/bar/baz
     parent: 'master'
     author: poodle
+
+- change:
+    project: banana
+    name: all the things
+    files:
+      - images/scarab/lib/scarab.rb
+      - images/scarab/lib/scarab/cli/error_reporter.rb
+      - images/scarab/lib/scarab/composer.rb
+      - images/scarab/lib/scarab/compound_interpolator.rb
+      - images/scarab/lib/scarab/core_ext.rb
+      - images/scarab/lib/scarab/directives/env.rb
+      - images/scarab/lib/scarab/directives/route.rb
+      - images/scarab/lib/scarab/directives/vault_secret.rb
+      - images/scarab/lib/scarab/loader.rb
+      - images/scarab/lib/scarab/location_tracking_interpolator.rb
+      - images/scarab/lib/scarab/primitives/result.rb
+      - images/scarab/spec/fixtures/errors/env_variable_not_found.yml
+      - images/scarab/spec/fixtures/errors/env_variable_not_found_with_correction.yml
+      - images/scarab/spec/fixtures/errors/env_variable_not_specified.yml
+      - images/scarab/spec/fixtures/errors/mixed.yml
+      - images/scarab/spec/fixtures/errors/vault_secret_field_not_found.yml
+      - images/scarab/spec/fixtures/errors/vault_secret_field_not_specified.yml
+      - images/scarab/spec/fixtures/errors/vault_secret_not_found.yml
+      - images/scarab/spec/fixtures/errors/vault_secret_path_not_specified.yml
+      - images/scarab/spec/fixtures/errors/vault_secret_variable_not_specified.yml
+      - images/scarab/spec/integration/scarab_spec.rb
+      - images/scarab/spec/unit/composer_spec.rb
+      - images/scarab/spec/unit/compound_interpolator_spec.rb
+    parent: 'master'
+    author: poodle

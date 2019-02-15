@@ -1,0 +1,69 @@
+<dom-module id="fff-layout">
+  <template>
+    <div class="blur"></div>
+    <content></content>
+  </template>
+
+  <style>
+    :host([docking-style="side"]) {
+      bottom: 0;
+      left: 0;
+      /*overflow: auto;*/
+      position: fixed;
+      right: auto;
+      top: 0;
+      width: 240px;
+      z-index: 6;
+    }
+
+    :host([docking-style="overlay"]) {
+      height: 50vh;
+      left: 25vw;
+      min-height: 320px;
+      /*overflow: auto;*/
+      position: fixed;
+      top: 25vh;
+      width: 50vw;
+      z-index: 0;
+    }
+
+    :host([docking-style="overlay"]) .blur {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: -1;
+    }
+  </style>
+
+  <style is="custom-style">
+    body.with-fff-sidebar,
+    body.with-fff-sidebar gr-fixed-panel .gr-fixed-panel.floating {
+      margin-left: 240px;
+    }
+  </style>
+
+  <script>
+    Polymer({
+      is: 'fff-layout',
+
+      properties: {
+        dockingStyle: {
+          type: String,
+          reflectToAttribute: true,
+          observer: '_applyGlobalStyling'
+        },
+      },
+
+      _applyGlobalStyling(dockingStyle) {
+        document.body.classList.toggle('with-fff-sidebar', dockingStyle === 'side')
+      },
+
+      detached() {
+        document.body.classList.remove('with-fff-sidebar')
+      }
+    })
+  </script>
+</dom-module>
