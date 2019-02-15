@@ -1,38 +1,36 @@
 <link rel="import" href="../icons/fff-dock-to-side-icon.html">
 <link rel="import" href="../icons/fff-overlay-icon.html">
 <link rel="import" href="../icons/fff-close-icon.html">
-<link rel="import" href="../icons/fff-filter-icon.html">
 
 <dom-module id="fff-frame-controls">
   <template>
-    <div class="controls">
-      <template is="dom-if" if="[[isDockedToSide]]">
-        <button on-click="_turnIntoOverlay" title="Undock into separate window">
-          <fff-overlay-icon width="16" height="16"></fff-overlay-icon>
-        </button>
-      </template>
+    <span style="flex-grow: 1; vertical-align: middle">
+      Showing [[files.length]] files
+    </span>
 
-      <template is="dom-if" if="[[isOverlay]]">
-        <button on-click="_dockToSide" title="Dock to left">
-          <fff-dock-to-side-icon width="16" height="16"></fff-dock-to-side-icon>
-        </button>
-      </template>
-
-      <button on-click="_close" title="Close FFF">
-        <fff-close-icon width="20" height="20"></fff-close-icon>
+    <template is="dom-if" if="[[isDockedToSide]]">
+      <button on-click="_turnIntoOverlay" title="Undock into separate window">
+        <fff-overlay-icon width="16" height="16"></fff-overlay-icon>
       </button>
-    </div>
+    </template>
 
-    <div class="content-scroller">
-      <content />
-    </div>
+    <template is="dom-if" if="[[isOverlay]]">
+      <button on-click="_dockToSide" title="Dock to left">
+        <fff-dock-to-side-icon width="16" height="16"></fff-dock-to-side-icon>
+      </button>
+    </template>
+
+    <button on-click="_close" title="Close">
+      <fff-close-icon width="20" height="20"></fff-close-icon>
+    </button>
   </template>
 
   <style>
     :host {
-      display: block;
+      display: flex;
+      flex-direction: row;
+      align-items: flex-end;
       background: #eee;
-      text-align: right;
       padding: 0.5rem;
     }
 
@@ -61,6 +59,8 @@
           notify: true,
           reflectToAttribute: true
         },
+
+        files: Array,
 
         isOverlay: {
           type: Boolean,
@@ -100,7 +100,7 @@
 
       _turnIntoOverlay() {
         this.set('dockingStyle', 'overlay')
-      }
+      },
     })
   </script>
 </dom-module>

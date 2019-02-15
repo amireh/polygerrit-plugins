@@ -1,18 +1,17 @@
 <dom-module id="fff-layout">
   <template>
     <div class="blur"></div>
-    <content></content>
+    <content id="content"></content>
   </template>
 
   <style>
     :host([docking-style="side"]) {
       bottom: 0;
       left: 0;
-      /*overflow: auto;*/
       position: fixed;
       right: auto;
       top: 0;
-      width: 240px;
+      width: 20vw;
       z-index: 6;
     }
 
@@ -39,9 +38,17 @@
   </style>
 
   <style is="custom-style">
-    body.with-fff-sidebar,
-    body.with-fff-sidebar gr-fixed-panel .gr-fixed-panel.floating {
-      margin-left: 240px;
+    body.with-fff-sidebar gr-app ::content gr-fixed-panel#header,
+    body.with-fff-sidebar gr-app ::content > footer[r="contentinfo"],
+    body.with-fff-sidebar gr-app ::content gr-change-view ::content #mainContent,
+    body.with-fff-sidebar gr-app ::content gr-diff-view ::content gr-fixed-panel ::content .floating,
+    body.with-fff-sidebar gr-app ::content gr-diff-view ::content gr-diff ::content .diffContainer
+    {
+      padding-left: 20vw;
+    }
+
+    body.with-fff-sidebar gr-app ::content gr-diff-view ::content gr-diff ::content #diffHeader {
+      margin-left: 20vw;
     }
   </style>
 
@@ -62,7 +69,7 @@
       },
 
       detached() {
-        document.body.classList.remove('with-fff-sidebar')
+        document.body.classList.toggle('with-fff-sidebar', false)
       }
     })
   </script>

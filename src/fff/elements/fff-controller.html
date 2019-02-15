@@ -1,14 +1,25 @@
 <link rel="import" href="./fff-file-tree.html">
+<link rel="import" href="./fff-frame-controls.html">
 <link rel="import" href="./fff-frame.html">
 <link rel="import" href="./fff-layout.html">
+<link rel="import" href="./fff-scrollable.html">
 
 <dom-module id="fff-controller">
   <template>
     <div>
       <template is="dom-if" if="[[_isVisible(view, toggled)]]" restamp="true">
-        <fff-layout docking-style="[[dockingStyle]]">
-          <fff-frame docking-style="{{dockingStyle}}" toggled="{{toggled}}">
-            <fff-file-tree files="[[files]]" />
+        <fff-layout view="[[view]]" docking-style="[[dockingStyle]]">
+          <fff-frame docking-style="[[dockingStyle]]">
+            <fff-frame-controls
+              files="[[files]]"
+              docking-style="{{dockingStyle}}"
+              toggled="{{toggled}}"
+            ></fff-frame-controls>
+
+            <fff-scrollable>
+              <fff-file-tree files="[[files]]">
+              </fff-file-tree>
+            </fff-scrollable>
           </fff-frame>
         </fff-layout>
       </template>
@@ -25,8 +36,8 @@
 
       keyBindings: {
         'f': '_toggle',
+        'esc': '_close',
       },
-
 
       properties: {
         files: Array,
@@ -54,6 +65,10 @@
         }
       },
 
+      listeners: {
+        'fff-link-clicked': '_closeOverlay'
+      },
+
       attached() {
         if (location.search.includes('fff=1')) {
           this.set('toggled', true)
@@ -73,14 +88,29 @@
       },
 
       _toggle(e) {
-        this.set('toggled', !this.toggled)
+        if (!this.shouldSuppressKeyboardShortcut(e) && this._isApplicableView(this.view)) {
+          e.preventDefault()
+          this.set('toggled', !this.toggled)
+        }
+      },
+
+      _close(e) {
+        if (!this.shouldSuppressKeyboardShortcut(e)) {
+          this.set('toggled', false)
+        }
+      },
+
+      _closeOverlay() {
+        if (this.dockingStyle === 'overlay') {
+          this.set('toggled', false)
+        }
       },
 
       _resetToggledStateOnLeave(view) {
         if (!this._isApplicableView(view)) {
           this.set('toggled', false)
         }
-      }
+      },
     })
   </script>
 </dom-module>

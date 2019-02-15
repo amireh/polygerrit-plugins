@@ -8,6 +8,7 @@ Gerrit.install(plugin => {
 
   plugin.registerCustomComponent('plugin-overlay', 'fff-controller').onAttached(controllerInstance => {
     controller = controllerInstance
+    controller.view = app.params.view
   })
 
   router.addEventListener('location-change', () => {
@@ -46,7 +47,11 @@ function createFileList({ change, comments, files, revision }) {
     let file = acc.find(x => x.filePath === filePath);
 
     if (!file) {
-      file = { filePath: filePath };
+      file = {
+        name: basename(filePath),
+        path: filePath,
+      };
+
       acc.push(file);
     }
 
@@ -66,4 +71,8 @@ function getUrlForFile({ change, revision, file }) {
   return (
     `/c/${change.project}/+/${change._number}/${revision._number}/${file}`
   );
+}
+
+function basename(path) {
+  return path.slice(path.lastIndexOf('/') + 1)
 }

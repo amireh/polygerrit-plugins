@@ -2,27 +2,27 @@
 
 <dom-module id="fff-file">
   <template>
-    <fff-file-icon width="16" height="16"></fff-file-icon>
+    <a class="link" href="[[url]]" on-click="_emitClose">
+      [[name]]
 
-    <a class="link" href="[[url]]">[[path]]</a>
-
-    <span class="comments">
       <template is="dom-if" if="[[comments.length]]">
-        ([[comments.length]])
+        <span class="comments">
+          ([[commentLabel]])
+        </span>
       </template>
-    </span>
+    </a>
+
   </template>
 
   <style>
     :host {
       display: block;
       position: relative;
-      padding-left: 16px; /* offset for icon */
+      margin-left: 19px;
     }
 
     :host:hover {
       background: #f5fafd; /* match gr-file-list .file-row */
-
     }
 
     fff-file-icon {
@@ -32,10 +32,12 @@
     }
 
     .link {
+      display: block;
       color: #2a66d9; /* match a.gr-file-list */
       /*display: inline-block;*/
       text-decoration: none;
       word-break: break-all;
+      line-height: 1.25rem;
       /*vertical-align: middle;*/
       /*margin-right: 1rem;*/
     }
@@ -62,8 +64,29 @@
           type: Array,
         },
 
+        commentLabel: {
+          type: String,
+          computed: '_computeCommentLabel(comments)'
+        },
+
         path: String,
         url: String
+      },
+
+      _computeCommentLabel(comments) {
+        if (!comments || !comments.length) {
+          return ''
+        }
+        else if (comments.length === 1) {
+          return '1 comment'
+        }
+        else {
+          return `${comments.length} comments`
+        }
+      },
+
+      _emitClose() {
+        this.fire('fff-link-clicked')
       }
     })
   </script>

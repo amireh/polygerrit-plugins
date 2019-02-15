@@ -66,7 +66,7 @@
         const rootFolder = { name: '/', files: [], folders: [] };
 
         fileList.forEach(function(file) {
-          const folderName = file.filePath.split('/').slice(0, -1).join('/')
+          const folderName = file.path.split('/').slice(0, -1).join('/')
 
           findOrCreateFolder(folderName, rootFolder).files.push(file);
         });

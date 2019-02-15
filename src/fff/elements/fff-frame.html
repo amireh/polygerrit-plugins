@@ -1,15 +1,6 @@
-<link rel="import" href="./fff-frame-controls.html">
-
 <dom-module id="fff-frame">
   <template>
-    <fff-frame-controls
-      docking-style="{{dockingStyle}}"
-      toggled="{{toggled}}"
-    ></fff-frame-controls>
-
-    <div class="content-scroller">
-      <content></content>
-    </div>
+    <content></content>
   </template>
 
   <style>
@@ -20,22 +11,16 @@
       height: 100%;
     }
 
-    .content-scroller {
-      height: 100%;
-      overflow: auto;
-      padding: 0.5rem 0;
-    }
-
     :host([docking-style="side"]) {
-      border-color: #aaa;
+      border-color: #ddd;
       border-right-style: solid;
       border-right-width: 1px;
       background: white;
+      flex-direction: column-reverse;
     }
 
     :host([docking-style="overlay"]) {
       box-shadow: 0 1px 10px rgba(0,0,0,.5);
-      /*border: 1px solid #a0a0a2;*/
       border-radius: 8px;
       overflow: hidden;
     }
@@ -48,11 +33,7 @@
       properties: {
         dockingStyle: {
           type: String,
-          notify: true
-        },
-        toggled: {
-          type: Boolean,
-          notify: true
+          reflectToAttribute: true,
         }
       }
     })

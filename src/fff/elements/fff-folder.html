@@ -8,7 +8,7 @@
         <li>
           <template is="dom-if" if="[[name]]">
             <header class="fff-folder-header">
-              <fff-folder-icon width="16" height="16"></fff-folder-icon>
+              <fff-folder-icon width="20" height="20"></fff-folder-icon>
               <span class="fff-folder-name">[[name]]/</span>
             </header>
           </template>
@@ -26,7 +26,8 @@
           <li class="fff-folder__file-container">
             <fff-file
               comments="[[file.comments]]"
-              path="[[file.filePath]]"
+              path="[[file.path]]"
+              name="[[file.name]]"
               url="[[file.url]]"
             />
           </li>
@@ -36,6 +37,10 @@
   </template>
 
   <style>
+    :host {
+      line-height: 1;
+    }
+
     .fff-folder-header {
       /*padding-left: 3px;*/
     }
@@ -46,10 +51,16 @@
       /*line-height: 16px;*/
       /*margin-left: 16px;*/
       /*padding-left: 3px;*/
-      /*vertical-align: middle;*/
+      vertical-align: middle;
     }
 
     fff-folder-icon {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    fff-folder-icon ::content svg {
+      fill: #3173c7;
       /*width: 13px;*/
       /*font-size: 13px;*/
       /*position: absolute;*/
@@ -64,7 +75,7 @@
     li {
       padding-left: 0;
       margin-left: 0;
-      line-height: 1.25rem;
+      /*line-height: 1.25rem;*/
     }
 
     .fff-folder__file-container {
