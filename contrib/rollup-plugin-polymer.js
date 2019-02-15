@@ -36,6 +36,10 @@ module.exports = function polymer({ input, inject = [], output }) {
     writeBundle(chunkInfo) {
       return new Promise((resolve, reject) => {
         const injections = inject.map(({ chunk }) => {
+          if (!chunkInfo[chunk]) {
+            return reject(new Error(`rollup-plugin-polyer: chunk "${chunk}" was not emitted!`))
+          }
+
           return `
             <dom-module>
               <script>

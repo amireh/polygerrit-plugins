@@ -24,7 +24,7 @@ module.exports = function execute(_commands) {
               next()
             }
             else {
-              reject()
+              reject(new Error(`command failed with code ${code}:\n\n\t${command}\n`))
             }
           })
         }
