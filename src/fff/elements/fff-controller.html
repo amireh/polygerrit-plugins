@@ -2,34 +2,63 @@
 
 <dom-module id="fff-controller">
   <template>
-    <template is="dom-if" if="[[visible]]" restamp="true">
-      <fff-frame files="[[files]]" />
-    </template>
+    <div>
+      <template is="dom-if" if="[[_isVisible(view, toggled)]]" restamp="true">
+        <fff-frame files="[[files]]" />
+      </template>
+    </div>
   </template>
 
   <script>
     Polymer({
       is: 'fff-controller',
 
+      behaviors: [
+        Gerrit.KeyboardShortcutBehavior
+      ],
+
+      keyBindings: {
+        'f': '_toggle',
+      },
+
+
       properties: {
+        files: Array,
+
+        keyEventTarget: {
+          type: Object,
+          value: function() {
+            return document.body;
+          }
+        },
+
+        toggled: {
+          type: Boolean,
+          value: false
+        },
+
         view: {
           type: String,
-        },
-
-        files: {
-          type: Array,
-        },
-
-        visible: {
-          computed: 'isVisible(view)',
-          // reflectToAttribute: true,
-          type: Boolean,
-          value: false,
+          observer: '_resetToggledStateOnLeave'
         }
       },
 
-      isVisible(view) {
-        return ['change','diff'].indexOf(view) > -1
+      _isVisible(view, toggled) {
+        return toggled && this._isApplicableView(view)
+      },
+
+      _isApplicableView(view) {
+        return ['change', 'diff'].indexOf(view) > -1
+      },
+
+      _toggle(e) {
+        this.set('toggled', !this.toggled)
+      },
+
+      _resetToggledStateOnLeave(view) {
+        if (!this._isApplicableView(view)) {
+          this.set('toggled', false)
+        }
       }
     })
   </script>

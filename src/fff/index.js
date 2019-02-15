@@ -1,27 +1,20 @@
-// import $ from 'jquery'
-// import createUI from './legacy/ui_controller'
 import { discardLeadingSlash } from './legacy/utils'
 
 Gerrit.install(plugin => {
   const app = document.querySelector('gr-app')
   const router = document.querySelector('gr-router')
-  const core = {
-    isViewingPatchset: () => ['change','diff'].indexOf(app.params.view) > -1
-  }
 
-  // const ui = createUI($, core)
+  let controller
 
-  router.addEventListener('location-change', () => {
-    controller.view = app.params.view
-
-    // if (!core.isViewingPatchset()) {
-    //   ui.unmount()
-    // }
+  plugin.registerCustomComponent('plugin-overlay', 'fff-controller').onAttached(controllerInstance => {
+    controller = controllerInstance
   })
 
-  const controller = document.body.appendChild(
-    document.createElement('fff-controller')
-  )
+  router.addEventListener('location-change', () => {
+    if (controller) {
+      controller.view = app.params.view
+    }
+  })
 
   plugin.on('showchange', (change, revision) => {
     const chNumber = change._number
@@ -31,6 +24,10 @@ Gerrit.install(plugin => {
       plugin.restApi().get(`/changes/${change.project}~${change._number}/revisions/${revision._number}/files`),
       plugin.restApi().get(`/changes/${change.project}~${change._number}/revisions/${revision._number}/comments`),
     ]).then(([files, comments]) => {
+      if (!controller) {
+        return
+      }
+
       controller.view = app.params.view
       controller.files = createFileList({
         change,
@@ -38,8 +35,6 @@ Gerrit.install(plugin => {
         files,
         revision,
       })
-
-      // ui.render(controller.files)
     })
   })
 })

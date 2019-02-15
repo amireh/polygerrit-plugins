@@ -1,4 +1,3 @@
-// Utils
 export function TreeView(fileList) {
   var tree = {
     items: [],
