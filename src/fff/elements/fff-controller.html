@@ -11,13 +11,13 @@
         <fff-layout view="[[view]]" docking-style="[[dockingStyle]]">
           <fff-frame docking-style="[[dockingStyle]]">
             <fff-frame-controls
-              files="[[files]]"
+              files="[[assortedFiles]]"
               docking-style="{{dockingStyle}}"
               toggled="{{toggled}}"
             ></fff-frame-controls>
 
             <fff-scrollable>
-              <fff-file-tree files="[[files]]">
+              <fff-file-tree files="[[assortedFiles]]">
               </fff-file-tree>
             </fff-scrollable>
           </fff-frame>
@@ -40,8 +40,31 @@
       },
 
       properties: {
-        files: Array,
+        /** @private */
+        assortedFiles: {
+          type: Array,
+          readOnly: true,
+          computed: '_assortFiles(changeNum, comments, files, patchNum,  project)',
+        },
 
+        /** @public */
+        changeNum: String,
+        /** @public */
+        comments: Array,
+        /** @public */
+        files: Array,
+        /** @public */
+        patchNum: String,
+        /** @public */
+        project: String,
+
+        /** @public */
+        view: {
+          type: String,
+          observer: '_closeOnLeavingSupportedPages'
+        },
+
+        /** @private */
         keyEventTarget: {
           type: Object,
           value: function() {
@@ -49,20 +72,17 @@
           }
         },
 
+        /** @private */
         dockingStyle: {
           type: String,
           value: 'side',
         },
 
+        /** @private */
         toggled: {
           type: Boolean,
           value: false
         },
-
-        view: {
-          type: String,
-          observer: '_resetToggledStateOnLeave'
-        }
       },
 
       listeners: {
@@ -79,19 +99,18 @@
         }
       },
 
-      _isVisible(view, toggled) {
-        return toggled && this._isApplicableView(view)
-      },
+      _assortFiles(changeNum, comments, files, patchNum, project) {
+        return files.map(path => {
+          const normalPath = discardLeadingSlash(path);
 
-      _isApplicableView(view) {
-        return ['change', 'diff'].indexOf(view) > -1
-      },
-
-      _toggle(e) {
-        if (!this.shouldSuppressKeyboardShortcut(e) && this._isApplicableView(this.view)) {
-          e.preventDefault()
-          this.set('toggled', !this.toggled)
-        }
+          return {
+            comments: comments[path],
+            name: basename(normalPath),
+            path: normalPath,
+            // TODO: what about encoding here?
+            url: `/c/${project}/+/${changeNum}/${patchNum}/${normalPath}`,
+          };
+        });
       },
 
       _close(e) {
@@ -106,11 +125,35 @@
         }
       },
 
-      _resetToggledStateOnLeave(view) {
+      _closeOnLeavingSupportedPages(view) {
         if (!this._isApplicableView(view)) {
           this.set('toggled', false)
         }
       },
+
+      _isApplicableView(view) {
+        return ['change', 'diff'].indexOf(view) > -1
+      },
+
+      _isVisible(view, toggled) {
+        return toggled && this._isApplicableView(view)
+      },
+
+      _toggle(e) {
+        if (!this.shouldSuppressKeyboardShortcut(e) && this._isApplicableView(this.view)) {
+          e.preventDefault()
+          this.set('toggled', !this.toggled)
+        }
+      },
+
     })
+
+    function discardLeadingSlash(s) {
+      return s[0] === '/' ? s.slice(1) : s
+    }
+
+    function basename(path) {
+      return path.slice(path.lastIndexOf('/') + 1)
+    }
   </script>
 </dom-module>

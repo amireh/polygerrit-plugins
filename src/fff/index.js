@@ -1,25 +1,40 @@
-import fetchData from './data'
+import resolveParameters from './params'
+import { setProperties } from './ext/polymer'
 
 Gerrit.install(plugin => {
   plugin.registerCustomComponent('plugin-overlay', 'fff-controller').onAttached(controller => {
     const app = document.querySelector('gr-app')
     const router = document.querySelector('gr-router')
-    const fetchAndInjectData = () => {
-      if (['change','diff'].includes(app.params.view)) {
-        fetchData({ view: app.params.view, restApi: plugin.restApi }).then(files => {
-          controller.view = app.params.view
-          controller.files = files
+    const restApi = plugin.restApi()
+
+    const resolveAndInjectParameters = () => {
+      const currentView = app.params.view
+
+      if (['change','diff'].includes(currentView)) {
+        resolveParameters({ currentView, restApi }).then(params => {
+          setProperties(controller, {
+            changeNum: params.changeNum,
+            comments: params.comments,
+            files: params.files,
+            patchNum: params.patchNum,
+            project: params.project,
+            view: currentView
+          })
         })
       }
     }
 
     router.addEventListener('location-change', () => {
-      if (controller) {
-        fetchAndInjectData({ app, controller, plugin })
-      }
+      // always pass it the current view so that it can hide on non-applicable
+      // views
+      controller.view = app.params.view
+
+      Polymer.RenderStatus.afterNextRender(app, () => {
+        resolveAndInjectParameters()
+      })
     })
 
-    fetchAndInjectData({ app, controller, plugin })
+    resolveAndInjectParameters()
   })
 })
 
