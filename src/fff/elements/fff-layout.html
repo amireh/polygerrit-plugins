@@ -1,7 +1,6 @@
 <dom-module id="fff-layout">
   <template>
-    <div class="blur"></div>
-    <content id="content"></content>
+    <content></content>
   </template>
 
   <style>
@@ -19,27 +18,26 @@
       height: 50vh;
       left: 25vw;
       min-height: 320px;
-      /*overflow: auto;*/
       position: fixed;
       top: 25vh;
       width: 50vw;
       z-index: 0;
     }
 
-    :host([docking-style="overlay"]) .blur {
-      position: fixed;
-      top: 0;
-      right: 0;
+    :host([docking-style="overlay"]):before {
+      content: '';
+      background: rgba(0,0,0,0.4);
       bottom: 0;
       left: 0;
-      background: rgba(0,0,0,0.4);
+      position: fixed;
+      right: 0;
+      top: 0;
       z-index: -1;
     }
   </style>
 
   <style is="custom-style">
     body.with-fff-sidebar gr-app ::content gr-fixed-panel#header,
-    body.with-fff-sidebar gr-app ::content > footer[r="contentinfo"],
     body.with-fff-sidebar gr-app ::content gr-change-view ::content #mainContent,
     body.with-fff-sidebar gr-app ::content gr-diff-view ::content gr-fixed-panel ::content .floating,
     body.with-fff-sidebar gr-app ::content gr-diff-view ::content gr-diff ::content .diffContainer
@@ -47,7 +45,11 @@
       padding-left: 20vw;
     }
 
-    body.with-fff-sidebar gr-app ::content gr-diff-view ::content gr-diff ::content #diffHeader {
+    /* footer can't be padded because it will clobber the controls */
+    body.with-fff-sidebar gr-app ::content > footer[r="contentinfo"],
+    /* diffHeader already uses padding so we need to resort to margin... */
+    body.with-fff-sidebar gr-app ::content gr-diff-view ::content gr-diff ::content #diffHeader
+    {
       margin-left: 20vw;
     }
   </style>
